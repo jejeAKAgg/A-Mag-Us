@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('allLink'); -%>
+    <title>Accueil | A-Mag Us</title>
+    <link rel="stylesheet" type="text/css" href="/styles/index.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jcarousel/0.3.5/jquery.jcarousel.min.js"></script>
+</head>
+<body class="container-fluid">
+    <header>
+        <%- include('navbar') -%>
+    </header>
+    <%- include('onlineFriend.ejs') -%>
+    <section id="chat-row">
+        <%if(locals.user){%><%-locals.user.chatBar%><%}%>
+    </section>
+    <section class="main">
+        <%if(locals.user && locals.user.admin){%>
+            <button class="admin-news-btn btn btn-dark" onclick="location.href='/news';">Add news</button>
+        <%}%>
+        <div class="row">
+            <img class="col-6" src="images/A-Mag_Us.png" id="title_img" alt="A-Mag-Us Title">
+            <iframe class="col-5"
+                    src="https://store.steampowered.com/widget/945360/?t=Un%20jeu%20de%20soci%C3%A9t%C3%A9%20en%20ligne%20et%20local%20de%20travail%20d'%C3%A9quipe%20et%20de%20trahison%20pour%204%20%C3%A0%2010%20joueurs%20...%20dans%20l'espace!"
+                    frameborder="0" id="buy-button" width="646" height="190">
+            </iframe>
+        </div>
+    </section>
+    <script>
+        function display(id, displayed){
+            let data = document.getElementById(id + '-popup');
+            displayed?data.style.display = 'none':data.style.display = 'block';
+        }
+    </script>
+    <section class="row carousel slide w-100" id="carousel-news" data-ride="carousel">
+        <%if(locals.news){%>
+        <div class="news-block carousel-inner">
+            <%locals.news.reverse().map((item, index)=>{%>
+                <div class="news-container carousel-item <%if(index === 0){%>active<%}%>" id="<%=item._id%>"
+                     onclick="display('<%=item._id%>', false);" >
+                    <%if(locals.user && (locals.user.admin || locals.user.master)){%>
+                        <button type="button" class="remove-news close"
+                                onclick="location.href='/remove-news?data=<%=item._id%>'">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    <%}%>
+                    <p class="news-title"><%=item.title%></p>
+                    <img src="<%=item.picture%>" alt="news picture" class="news-img">
+                    <p class="news-date"><%=item.date%></p>
+                    <p class="news-resume"><%=item.resume%></p>
+                    <p class="news-author"><%=item.author%></p>
+                </div>
+            <%});%>
+        </div>
+        <a class="carousel-control-prev" href="#carousel-news" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Prev</span>
+        </a>
+        <a class="carousel-control-next" href="#carousel-news" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+        <%locals.news.map((item)=>{%>
+            <div class="news-popup text-center" id="<%=item._id%>-popup">
+                <button type="button" class="close close-popup"
+                        onclick="display('<%=item._id%>', true)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h2 class="news-popup-title"><%=item.title%></h2>
+                <div class="news-inner-popup">
+                    <div class="news-popup-content">
+                        <div class="float-container">
+                            <img src="<%=item.picture%>" alt="" class="news-popup-img">
+                            <p class="news-popup-date"><%=item.date%></p>
+                        </div>
+                        <%=item.content%>
+                    </div>
+                    <p class="news-popup-author"><%=item.author%></p>
+                </div>
+            </div>
+        <%});%>
+        <script>
+            let car = $('#carousel-news');
+            car.carousel({
+                interval: false,
+                wrap: true
+            });
+            car.on('slid.bs.carousel', (e)=>{
+                console.log(e.direction);
+                if(e.direction === 'left') {
+                    let temp = document.getElementsByClassName('news-block')[0].children[0]
+                    document.getElementsByClassName('news-block')[0].children[0].remove()
+                    document.getElementsByClassName('news-block')[0].appendChild(temp);
+                }else if(e.direction === 'right'){
+                    let arr = document.getElementsByClassName('news-block')[0]
+                    let temp = arr.children[arr.children.length - 1]
+                    arr.insertBefore(temp, arr.firstChild);
+                }
+            });
+        </script>
+        <%}%>
+    </section>
+    <%- include('cookiePopup') -%>
+</body>
+</html>

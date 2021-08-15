@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('allLink'); -%>
+    <title>A-Mag Us | Edit <%= locals.user %></title>
+    <link rel="stylesheet" type="text/css" href="/styles/editUser.css">
+</head>
+<body>
+<header>
+    <%- include('navbar'); -%>
+</header>
+<section class="main">
+    <img src="images/userDefault.jpg" alt="" class="user-image circle">
+    <div class="user-info">
+        <form method="post" action="/edit-user">
+            <h1>Edit User</h1>
+            <div class="container">
+                <div class="col-8 ml-5">
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group" id="small-form-group-left">
+                                <label for="colors" style="color: aliceblue;">Colors</label>
+                                <select class="custom-select" id="colors" name="colors">
+                                    <% locals.colors.sort().map((color)=>{ %>
+                                        <% if (locals.doc.favoriteColor === color) { %>
+                                            <option value="<%= color %>" selected><%= color.charAt(0).toUpperCase() + color.slice(1) %></option>
+                                        <% } else { %>
+                                            <option value="<%= color %>"><%= color.charAt(0).toUpperCase() + color.slice(1) %></option>
+                                        <% } %>
+                                    <% }) %>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group" id="small-form-group-right">
+                                <label for="maps" style="color: aliceblue;">Maps</label>
+                                <select class="custom-select" id="maps" name="maps">
+                                    <% locals.maps.map((map)=> { %>
+                                        <% if(locals.doc.favoriteMap === map) {%>
+                                            <option value="<%= map %>" selected><%= map.toUpperCase() %></option>
+                                        <%}else{%>
+                                            <option value="<%= map %>"><%= map.toUpperCase() %></option>
+                                        <%}%>
+                                    <% })%>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group" id="small-form-group-left">
+                                <label for="country" style="color: aliceblue;">Country</label>
+                                <select class="custom-select" id="country" name="country">
+                                    <% locals.countries.forEach(country => { %>
+                                    <%if (locals.doc.country === country.name) {%>
+                                        <option value="<%= country.name %>" selected><%= country.name %></option>
+                                    <%} else {%>
+                                        <option value="<%= country.name %>"><%= country.name %></option>
+                                    <%}%>
+                                    <% })%>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group" id="small-form-group-right">
+                                <label for="language" style="color: aliceblue;">Language</label>
+                                <select class="custom-select" id="language" name="language">
+                                    <% locals.languages.all().forEach(language => { %>
+                                    <%if (locals.doc.language === language[1]) {%>
+                                        <option value="<%= language[1] %>" selected><%= language[1].toUpperCase() %> (<%= language.name %>)</option>
+                                    <%} else {%>
+                                        <option value="<%= language[1] %>"><%= language[1].toUpperCase() %> (<%= language.name %>)</option>
+                                    <%}%>
+                                    <% })%>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-8 ml-5">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="password" style="color: aliceblue;">Password</label>
+                            <input required type="password" name="password" id="password" minlength="8" autocomplete="off" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="rpassword" style="color: aliceblue;">Repeat Password</label>
+                            <input type="password" name="rpassword" id="rpassword" autocomplete="off" class="form-control" placeholder="repeats the password if willing to change">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input class="btn btn-dark" id="edit" type="submit" value="Edit">
+        </form>
+    </div>
+</section>
+<%- include('onlineFriend.ejs') -%>
+<section id="chat-row">
+    <%if(locals.user){%><%-locals.user.chatBar%><%}%>
+</section>
+</body>
+</html>

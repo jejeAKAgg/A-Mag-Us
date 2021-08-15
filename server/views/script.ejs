@@ -1,0 +1,265 @@
+<script>
+    let socket = io();
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    <%# Window listeners start%>
+    <% if(locals.notif !== undefined){%>
+    window.onload =  ()=> {
+        let notif = {
+            type: "<%= locals.notif.type%>",
+            pseudo: "<%=locals.notif.pseudo%>",
+            picture: "<%=locals.notif.picture%>",
+            date: "<%=locals.notif.date%>",
+        }
+        let to = "<%=locals.to%>";
+        socket.emit('notif', notif, to);
+        let list = document.getElementsByClassName('chat-list');
+        if(document.getElementById('chat-row').hasChildNodes()){
+            for(let i=0; i<document.getElementById('chat-row').childElementCount; i++){
+                list[i].scrollTop = list[i].scrollHeight;
+            }
+        }
+    };
+    <%}else{%>
+    window.onload = ()=>{
+        let list = document.getElementsByClassName('chat-list');
+        if(document.getElementById('chat-row').hasChildNodes()){
+            for(let i=0; i<document.getElementById('chat-row').childElementCount; i++){
+                list[i].scrollTop = list[i].scrollHeight;
+            }
+        }
+    }
+    <%}if (locals.user){%>
+
+    window.addEventListener('beforeunload', ()=>{
+        $.post('/update-chat-bar', {data: document.getElementById('chat-row').innerHTML});
+    })
+    <%# window listener end%>
+    <%# socket listeners start%>
+    socket.on('notif', (notif) => {
+        switch(notif.type) {
+
+            case("friendRequest"):
+                if (document.getElementById('to-remove') !== null) document.getElementById('to-remove').remove();
+                $.post('/update-friends', {}, (data, status) => {
+                    if (status === 'success') {
+                        let div = document.getElementById('user-btn-container');
+                        if (div) div.innerHTML = "<button class=\"msg-btn btn btn-dark\" onclick=\"location.href='" +
+                            "/acceptFriend?user=" + notif.pseudo + "'\">Accept Friend <span class=\"fa fa-user-plus\">" +
+                            "</span> </button>";
+                        let li = "<li>" +
+                            "<div class=\"notif" + notif.type + "\">\n" +
+                            "    <img class=\"notif-img\" src=\"" + notif.picture + "\" alt=\"\">\n" +
+                            "    <p class=\"notif-p\">" + notif.pseudo + " invited you as friend</p>\n" +
+                            "    <button class=\"btn btn-dark\"\n" +
+                            "             onclick=\"location.href='/acceptFriend?user=" + notif.pseudo + "'\" >\n" +
+                            "             Accept\n" +
+                            "    </button>\n" +
+                            "    <button class=\"btn btn-dark\"\n" +
+                            "            onclick=\"location.href='/refuse?user=" + notif.pseudo + "'\" >\n" +
+                            "            Refuse\n" +
+                            "    </button>\n" +
+                            "</div>\n" +
+                            "</li>\n";
+                        document.getElementById('notif-dd').insertAdjacentHTML('afterbegin', li);
+                    }
+                });
+                break;
+
+            case("friendAcceptation"):
+                if (document.getElementById('to-remove')) document.getElementById('to-remove').remove();
+                $.post('/update-friends', {}, (data, status) => {
+                    if (status === 'success') {
+                        let div = document.getElementById('user-btn-container');
+                        if (div) div.innerHTML = "<button class=\"msg-btn btn btn-dark\" onclick=\"openChat('"+notif.publicKey.replace(/\n/g, '$') + "', '"+ notif.pseudo +"')\">" +
+                        "Message <span class=\"fa fa-comment\"></span></button>\n";
+                        let li = "<li>\n" +
+                            "<div class=\"notif" + notif.type + "\">\n" +
+                            "    <img class=\"notif-img\" src=\"" + notif.picture + "\" alt=\"\">\n" +
+                            "    <p class=\"notif-p\">" + notif.pseudo + " accepted your invitation</p>\n" +
+                            "</div>\n" +
+                            "</li>\n"
+                        <%if(locals.doc){%>
+                            let user = '<%= locals.doc.pseudo %>';
+                            <%if((locals.user.admin || locals.user.master) && locals.doc.admin && !locals.doc.master){%>
+                            div.innerHTML += "<button class=\"demote-btn btn btn-dark\" onclick=\"location.href='/rank?up=false&user="+user+"'\">\n" +
+                                             "    Demote\n" +
+                                             "</button>\n"
+                            <%}else if ((locals.user.admin || locals.user.master) && !locals.doc.admin && !locals.doc.master){%>
+                            div.innerHTML += "<button class=\"promote-btn btn btn-dark\" onclick=\"location.href='/rank?up=true&user="+user+"'\">\n" +
+                                             "    Promote\n" +
+                                             "</button>\n"
+                            <%}%>
+                        <%}%>
+                        document.getElementById('notif-dd').insertAdjacentHTML('afterbegin', li);
+                    }
+                });
+                break;
+
+            case("disconnection"):
+                document.getElementById(notif.pseudo).remove();
+                if (document.getElementById('inner-list') && document.getElementById('inner-list').childElementCount === 0) {
+                    $('#inner-list').append($('<li id=\"to-remove-online\">').append($('<p>').html("No friend online yet...")));
+                }
+                break;
+
+            case("onlineFriend"):
+                if (document.getElementById('to-remove-online')) document.getElementById('to-remove-online').remove();
+                let picture = notif.picture ? notif.picture : "images/userDefault.jpg"
+
+                let online = "<li id=\"" + notif.pseudo + "\">\n" +
+                    "    <div class=\"online-friend-container\" onclick=\"openChat(\'"+ notif.publicKey + "\',\'" +
+                    notif.pseudo.toString() + "\')\">\n" +
+                    "        <img class=\"online-friend-picture\" src=\"" + picture + "\" alt=\"\">\n" +
+                    "        <p class=\"online-friend-pseudo\">" + notif.pseudo + "</p>\n" +
+                    "    </div>\n" +
+                    "</li>\n";
+                document.getElementById('inner-list').insertAdjacentHTML('afterbegin', online);
+                let to = notif.pseudo;
+                let response = {
+                    'type': "onlineResponse",
+                    'pseudo': "<%=locals.user.pseudo%>",
+                    'picture': "<%=locals.user.picture%>",
+                    'publicKey': "<%=locals.user.publicKey.replace(/\n/g, '$')%>",
+                    'date': new Date().toISOString()
+                }
+                socket.emit('notif', response, to);
+                break;
+
+            case("onlineResponse"):
+                if(document.getElementById('to-remove-online')) document.getElementById('to-remove-online').remove();
+                let pict = notif.picture ? notif.picture : "images/userDefault.jpg"
+                let on = "<li id=\"" + notif.pseudo + "\">\n" +
+                    "    <div class=\"online-friend-container\" onclick=\"openChat(\'"+ notif.publicKey + "\',\'" +
+                    notif.pseudo + "\')\">\n" +
+                    "        <img class=\"online-friend-picture\" src=\"" + pict + "\" alt=\"\">\n" +
+                    "        <p class=\"online-friend-pseudo\">" + notif.pseudo + "</p>\n" +
+                    "    </div>\n" +
+                    "</li>\n";
+                document.getElementById('inner-list').insertAdjacentHTML('afterbegin', on);
+                break;
+            case("rankChanged"):
+                $.post('/rank', {}, (data, state)=>{
+                    if (state === 'success') document.location.reload();
+                });
+                break;
+            default:
+                break;
+        }
+    });
+
+    socket.on('message', (data)=>{
+        if(!document.getElementById('chat-container-'+data.pseudo)) {
+            openChat(data.publicKey.replace(/\n/g, '$'), data.pseudo, true);
+        }
+        let decrypt = new JSEncrypt();
+        decrypt.setPrivateKey($('#privateKey').val());
+        let message = decrypt.decrypt(data.message, undefined, undefined);
+        let li = "<li><div class=\"chat-msg chat-received\"><p>"+message+"</p></div></li>\n";
+        $('#chat-'+ data.pseudo).append(li);
+        document.getElementById('chat-'+data.pseudo).scrollTop = document.getElementById('chat-'+data.pseudo).scrollHeight;
+        let header = document.getElementById('chat-header-'+data.pseudo);
+        header.classList.add('blink');
+    });
+    <%# socket listener end%>
+
+    function openChat(publicKey, user, closed=false){
+        if (document.getElementById('chat-box-'+user)) return
+        let div = ""+
+            "<div class=\"chat-container alert col-3\" id=\"chat-container-"+user+"\">\n"+
+            "    <div class=\"chat-header\" id=\"chat-header-"+user+"\" onclick=\"displayChat('"+user+"')\">\n"+
+            "        <img class=\”chat-header-picture\" src=\'\' alt\"\">\n"+
+            "        <p class=\"chat-header-pseudo\">"+ user +"</p>\n"+
+            "        <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
+            "            <span aria-hidden=\"true\">&times;</span>\n" +
+            "        </button>\n"+
+            "    </div>\n"+
+            "    <div class=\"chat-box open\" id=\"chat-box-"+user+"\">\n"+
+            "        <ul class=\"chat-list\" id=\"chat-"+user+"\"></ul>\n" +
+            "        <form  class='chat-form'  method=\"post\" action=\"\" id=\"form-"+user+"\" " +
+            "               onsubmit=\"return sendMessage('"+publicKey+"', '"+user+"')\" >\n" +
+            "            <input class=\"chat-input\" type=\"text\" name=\"form-"+user+"-input\" id=\"input-"+user+"\" " +
+            "                   autocomplete=\"off\" placeholder=\"Type here...\">\n"+
+            "            <button class=\"btn btn-dark chat-send-btn\"><span class=\"fas fa-paper-plane\"></span></button>\n"+
+            "        </form>\n" +
+            "    </div>\n"+
+            "</div>\n ";
+        if(closed) div = div.replace('open', 'close');
+        document.getElementById('chat-row').insertAdjacentHTML('afterbegin', div);
+    }
+
+    function stopBlink(user){
+        let header = document.getElementById('chat-header-'+user);
+        if(header.classList.contains('blink')) header.classList.remove('blink');
+    }
+
+    function displayChat(user){
+        let chat = document.getElementById('chat-box-' + user);
+        if (chat.classList.contains('close')) {
+            chat.classList.remove('close');
+            chat.classList.add('open');
+            stopBlink(user)
+            document.getElementById('chat-'+user).scrollTop = document.getElementById('chat-'+user).scrollHeight;
+        }else {
+            if(document.getElementById('chat-header-'+user).classList.contains('blink')) stopBlink(user);
+            else {
+                chat.classList.remove('open');
+                chat.classList.add('close');
+            }
+        }
+    }
+
+    function sendMessage(publicKey, user){
+        publicKey = publicKey.replace(/\$/g, '\n');
+        let input = $('#input-'+user);
+        let encrypt = new JSEncrypt();
+        let message = input.val();
+        encrypt.setPublicKey(publicKey)
+        let encrypted = encrypt.encrypt(message, undefined, undefined);
+        input.val('');
+        let li = "<li><div class=\"chat-msg chat-send\">"+message+"</div></li>\n";
+        $('#chat-'+user).append(li);
+        socket.emit('message', encrypted, user);
+        document.getElementById('chat-'+user).scrollTop = document.getElementById('chat-'+user).scrollHeight;
+        stopBlink(user);
+        return false;
+    }
+    <%# ajax search user call%>
+    $('#search-user-form').submit((event)=>{
+        event.preventDefault();
+        $.post('/search-user', {user: $('#search-input').val()}, (data, state)=>{
+            if(state === 'success') {
+                document.getElementById('search-res').innerHTML = "";
+                data.map((user)=>{
+                    if(user.pseudo !== '<%=locals.user.pseudo%>'){
+                        let pic = user.picture?user.picture:'images/userDefault.jpg';
+                        let div = ""+
+                            "<li>\n"+
+                            "    <div class=\"search-user-container\">\n"+
+                            "        <img class=\"search-user-img\" src=\""+ pic +"\" alt=\"\">\n"+
+                            "        <p class=\"search-user-pseudo\">\n"+
+                            "            <a href=\"/user-page?user="+user.pseudo+"\">"+user.pseudo+"</a>\n"+
+                            "        </p>\n"+
+                            "    </div>\n"+
+                            "</li>\n";
+                        document.getElementById('search-res').insertAdjacentHTML('beforeend', div)
+                    }
+                });
+                if(!document.getElementById('search-res').hasChildNodes()){
+                    let div = ""+
+                        "<li>\n"+
+                        "    <div class=\"search-user-container\">\n"+
+                        "        <p class=\"no-result\">\n"+
+                        "            Sorry, no user found\n"+
+                        "        </p>\n"+
+                        "    </div>\n"+
+                        "</li>\n";
+                    document.getElementById('search-res').insertAdjacentHTML('beforeend', div)
+                }
+            }
+        })
+    });
+    <%}%>
+</script>

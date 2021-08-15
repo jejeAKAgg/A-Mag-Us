@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('allLink'); -%>
+    <link rel="stylesheet" type="text/css" href="styles/forumPage.css">
+    <title><%=locals.doc.title%> | A-Mag Us</title>
+</head>
+<body>
+    <header>
+        <%- include('navbar'); -%>
+    </header>
+    <section class="main">
+        <h1 class="conv-title"><%=locals.doc.title%></h1>
+        <div class="post-container">
+            <div class="post-frame">
+                <div class="post-header">
+                    <p class="post-author"><a href="/user-page?user=<%=locals.doc.author%>"><%=locals.doc.author%></a></p>
+                    <p class="post-date ml-auto"><%=locals.doc.date%></p>
+                </div>
+                <p class="inner-text"><%- locals.doc.content.replace(/(?:\r\n|\r|\n)/g, ' <br> ')%></p>
+                <!-- use of - instead of = because of replacing text for html ejs-->
+            </div>
+            <%if(locals.doc.answers){%>
+            <div class="answer-container">
+            <%locals.doc.answers.map((answer)=>{%>
+                <div class="answer-frame">
+                    <div class="answer-header">
+                        <p class="answer-author"><a href="/user-page?user=<%=answer.author%>"><%=answer.author%></a></p>
+                        <p class="answer-date ml-auto"><%=answer.date%></p>
+                    </div>
+                    <p class="answer-content"><%-answer.content.replace(/(?:\r\n|\r|\n)/g, ' <br> ')%></p>
+
+                </div>
+            <%});}%>
+            </div>
+            <%if(locals.user && locals.user.pseudo){%>
+            <form class="answer-input-frame text-center" method="post" action="/answer-post?subject=<%=locals.subject%>&title=<%=locals.doc.title%>&author=<%=locals.doc.author%>&date=<%=locals.doc.date%>">
+                <label for="answer"></label>
+                <textarea placeholder="Type your answer here" name="answer" id="answer"
+                          rows="5" cols="60" minlength="20" maxlength="500" required></textarea>
+                <div class="checker-container">
+                    <input type="checkbox" id="checker" required>
+                    <label for="checker">The content of my post doesn't violate the site rules</label>
+                </div>
+                <input class="btn btn-dark" type="submit" value="Post your answer">
+            </form>
+            <%}%>
+        </div>
+    </section>
+    <%- include('onlineFriend.ejs') -%>
+    <section id="chat-row">
+        <%if(locals.user){%><%-locals.user.chatBar%><%}%>
+    </section>
+</body>
+</html>

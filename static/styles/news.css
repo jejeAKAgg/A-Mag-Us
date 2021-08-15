@@ -1,0 +1,52 @@
+.main{
+    margin: 7% 5% 0 5%;
+    background-color: rgba(8, 8, 87, 0.76);
+    min-height: 80vh;
+    border-radius: 15px;
+}
+
+.form{
+    width: 100%;
+    height: 100%;
+}
+
+input[type=text],
+textarea{
+    color: white;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    background-color: #1f2a43;
+    border: none;
+    border-radius: 15px;
+}
+
+textarea{
+    padding: 1% 2% 1% 2%;
+}
+
+#content{
+    height: 40vh;
+}
+
+.custom-file{
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 2%;
+}
+
+.custom-file-label{
+    background-color: #203343;
+    border: none;
+}
+
+.custom-file-input{
+    background-color: #1f2a43;
+}
+
+input[type=submit]{
+    width: 30%;
+    margin-left: 35%;
+    margin-right: 35%;
+    margin-top: 2%;
+}

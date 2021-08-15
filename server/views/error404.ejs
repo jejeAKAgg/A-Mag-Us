@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('allLink'); -%>
+    <title>Error 404 | A-Mag Us</title>
+    <link rel="stylesheet" type="text/css" href="styles/error404.css">
+</head>
+<body>
+    <header>
+        <%- include('navbar'); -%>
+    </header>
+    <section class="main">
+        <section class="shadowed"></section>
+    </section>
+    <section class="error-text">
+        <p>Error 404</p>
+    </section>
+    <%- include('onlineFriend.ejs') -%>
+    <section id="chat-row">
+        <%if(locals.user){%><%-locals.user.chatBar%><%}%>
+    </section>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('allLink'); -%>
+    <meta
+    <title>About Us | A-Mag Us</title>
+    <link rel="stylesheet" type="text/css" href="styles/aboutUs.css">
+</head>
+<body>
+<header>
+    <%- include('navbar'); -%>
+</header>
+<section class="main">
+    <div class="about-us-container">
+        <div class="about-us-text-box">
+            To all of our new crewmates, welcome ! This website has been made by 3 students in Computer Sciences from the Catholic University of Louvain-La-Neuve for the 'deepening in computer science' course!<br>
+            In order to complete this final project and stand out from the crowd, we have decided to create a website nous avons opter pour la création d'un site in connection with one of the biggest game of the moment: Among Us.
+            Our website, called 'A-Mag Us', will aim to inform the Among Us community via publications including any type of information (News, Tips, Frequently Asked Questions, ...).<br><br>
+            Hoping from the bottom of our hearts that you will find your happiness there,<br>
+            The A-Mag US team.<br><br>
+            <a href="https://github.com/RainMaker1707/appsinf_groupeQ_final"><b>Our GitHUB</b></a>
+        </div>
+        <div class="about-us-profile-box">
+            <div class="about-us white">
+                <b>RainMaker</b>
+                <div class="about-us-name-box" >
+                    Allegaert Hadrien
+                </div>
+            </div>
+            <div class="about-us black">
+                <b>GGisOnline</b>
+                <div class="about-us-name-box" >
+                    Lechat Jérôme
+                </div>
+            </div>
+            <div class="about-us red">
+                <b>Czacio</b>
+                <div class="about-us-name-box" >
+                    Cezary Świerżewski
+                </div>
+            </div>
+        </div>
+
+    <script>
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function sideDisplay(){
+            let id = document.getElementById('sidebar');
+            let icon = document.getElementById('displayer');
+            if(id.classList.contains('open')){
+                id.classList.add('closing');
+                icon.classList.remove('rotate')
+                icon.classList.add('rotate2');
+                await sleep(1000);
+                id.classList.remove('open');
+                id.classList.remove('closing');
+                id.classList.add('closed');
+            }else{
+                id.classList.add('opening');
+                id.classList.remove('closed');
+                icon.classList.remove('rotate2')
+                icon.classList.add('rotate')
+                await sleep(1000)
+                id.classList.add('open')
+                id.classList.remove('opening');
+            }
+        }
+    </script>
+</section>
+<%- include('onlineFriend.ejs') -%>
+<section id="chat-row" class="row">
+    <%if(locals.user){%><%-locals.user.chatBar%><%}%>
+</section>
+</body>
+</html>

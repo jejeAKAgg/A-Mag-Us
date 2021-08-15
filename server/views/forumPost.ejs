@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('allLink') -%>
+    <link rel="stylesheet" type="text/css" href="styles/forumPost.css">
+    <title>Forum Post | A-Mag Us</title>
+</head>
+<body>
+    <header>
+        <%- include('navbar') -%>
+    </header>
+    <section class="main">
+        <h1>Add a new post</h1>
+        <div class="inner text-center">
+            <form method="post" action="/forum-post">
+                <label for="subject">Choose a subject:</label>
+                <select id="subject" name="subject">
+                    <%locals.subjects.map((item)=>{%>
+                        <option value="<%=item.subject%>"><%=item.subject%></option>
+                    <%})%>
+                </select>
+                <label for="title"></label>
+                <input class="title" name="title" id="title" placeholder="Title"
+                       type="text" minlength="" maxlength="" required>
+                <label for="content"></label>
+                <textarea rows="10" cols="60" name="content" id="content" placeholder="Enter your text here..."
+                          minlength="" maxlength="" required></textarea>
+                <div class="checker-container">
+                    <input type="checkbox" id="checker" required>
+                    <label for="checker">I've read the chart rules before I post this</label>
+                </div>
+                <input class="btn btn-dark" type="submit" value="Send">
+            </form>
+        </div>
+    </section>
+    <%- include('onlineFriend.ejs') -%>
+    <section id="chat-row">
+        <%if(locals.user){%><%-locals.user.chatBar%><%}%>
+    </section>
+</body>
+</html>

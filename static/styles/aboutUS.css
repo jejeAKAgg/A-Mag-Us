@@ -1,0 +1,135 @@
+body{
+    height:100%;
+    overflow: hidden;
+}
+.main{
+    margin-top: 5%;
+    width: 100%;
+    min-height: 95vh;
+    overflow: hidden;
+}
+
+#displayer{
+    width: 8%;
+    position: fixed;
+    left: 90%;
+    display: inline;
+}
+
+#displayer .fa{
+    margin-right: 15%;
+}
+
+.about-us{
+    position: absolute;
+    color: white;
+    font-size: small;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    top: 10%;
+    width: 25%;
+    height: 100%;
+}
+
+.about-us-container{
+    position: absolute;
+    top: 20%;
+    background-color: rgba(20,25,46,0.91);
+    width: 80%;
+    margin-left: 10%;
+    min-width: 50%;
+    height: 70%;
+    border-radius: 15px;
+}
+
+.about-us-text-box{
+    position: absolute;
+    color: white;
+    top: 5%;
+    width: 70%;
+    margin-top: 3%;
+    margin-left: 15%;
+    min-width: 50%;
+}
+
+.about-us-profile-box{
+    position: absolute;
+    color: white;
+    top: 65%;
+    width: 90%;
+    margin-left: 5%;
+    min-width: 50%;
+    height: 30%;
+}
+
+.about-us-name-box{
+    position: absolute;
+    color: white;
+    text-align: center;
+    top: 70%;
+    width: 50%;
+    min-width: 50%;
+    height: 10%;
+    padding-top: 5%;
+}
+
+.black{
+    background-image: url('../images/BlackAUS.png');
+    left: 45%;
+}
+
+.white{
+    background-image: url('../images/whiteAUS.png');
+    left: 10%;
+}
+
+.red{
+    background-image: url('../images/RedAUS.png');
+    left: 80%;
+}
+
+.sidebar{
+    z-index: 2;
+    height: 80vh;
+    width: 20%;
+    position: fixed;
+    top: 17%;
+    left: 100%;
+}
+
+.sidebar iframe{
+    min-height: 600px;
+    min-width: 200px;
+    height: 100%;
+    width: 100%;
+}
+
+.opening{
+    transform: translate3d(-100%, 0, 0);
+    transition: transform 1s ease-in-out;
+}
+
+.open{
+    left: 80%;
+}
+
+.closing{
+    transform: translate3d(100%, 0, 0);
+    transition: transform 1s ease-in-out;
+}
+
+.closed{
+    left: 100%;
+}
+
+.rotate .fa{
+    transition: transform 1s ease-in-out;
+    transform: rotate(90deg);
+    transform-origin: center center;
+}
+
+.rotate2 .fa{
+    transition: transform 1s ease-in-out;
+    transform: rotate(0);
+    transform-origin: center center;
+}

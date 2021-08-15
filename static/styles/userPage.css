@@ -1,0 +1,102 @@
+body{
+    color: white;
+}
+
+.user-image{
+    z-index: 1;
+    position: absolute;
+    margin-top: 10%;
+    margin-left: 7%;
+    width: 250px;
+    height: 250px;
+    border: 5px solid rgba(30, 133, 232, 0.66);
+    border-radius: 50%;
+}
+
+.user-info{
+    position: absolute;
+    display: block;
+    top: 25%;
+    background-color: rgba(20,25,46,0.91);
+    width: 80%;
+    margin-left: 10%;
+    min-width: 50%;
+    height: 70%;
+    border-radius: 15px;
+    padding-left: 15%;
+    padding-top: 2%;
+}
+.user-title{
+    display: inline-flex;
+    width: 95%;
+}
+.user-name{
+    font-size: 5em;
+    max-height: 200px;
+    min-width: fit-content;
+    margin-right: 10px;
+    margin-left: 50px;
+}
+
+.user-country,
+.user-language{
+    margin-top: 15px;
+    font-size: 1.5em;
+    margin-right: 5%;
+}
+
+
+.user-pref{
+    z-index: 1;
+    font-size: 2em;
+}
+
+.user-map,
+.user-colour{
+    margin-left: 5%;
+    margin-right: 10%;
+    display: inline;
+}
+
+.user-infos{
+    display: inline-flex;
+    width: 65%;
+}
+
+.status-zone{
+    display: inline-flex;
+    width: 30%;
+    max-height: 50px;
+}
+
+.status-image{
+    display: inline-flex;
+    max-height: 40px;
+}
+
+.friend-buttons{
+    display: inline-flex;
+    width: 35%;
+    max-height: 50px;
+    margin-top: 75px;
+    margin-left: 150px;
+}
+
+.msg-btn{
+    margin-left: 5%;
+}
+
+.edit-btn{
+    width: 35%;
+    margin-left: 10%;
+}
+
+.promote-btn{
+    width: 35%;
+    margin-left: 20%;
+}
+
+.demote-btn{
+    width: 35%;
+    margin-left: 20%;
+}

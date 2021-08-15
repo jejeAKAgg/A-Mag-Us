@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('allLink'); -%>
+    <link rel="stylesheet" type="text/css" href="styles/forum.css">
+    <title>Forum | A-Mag Us</title>
+</head>
+<body>
+    <header>
+        <%- include('navbar'); -%>
+    </header>
+
+    <section class="main">
+        <section class="before">
+            <h1>Forum</h1>
+            <%if(locals.user){%>
+                <%if(locals.user.admin || locals.user.master){%>
+                    <button class="post-btn btn btn-dark ml-auto" type="button" onclick="location.href='#'">Add subject</button>
+                <%}%>
+                <button class="post-btn btn btn-dark <%if(!(locals.user.admin || locals.user.master)){%>ml-auto<%}else{%>ml-5<%}%>"
+                        type="button" onclick="location.href='/forum-post'" >Add post</button>
+            <%}%>
+        </section>
+        <div class="search-forum" id="search-forum">
+            <form action="/search-forum" method="post" id="search-forum-form">
+                <label for="search" class="form-label offscreen">Search: </label>
+                <input type="search" id="search" name="search" size="100" placeholder="Search"/>
+                <button type="submit" class="btn btn-dark"><span class="fa fa-search"></span></button>
+            </form>
+        </div>
+        <div class="subjects-block">
+        <%locals.subjects.reverse().map((subject)=>{%>
+            <div class="subject-container" id="<%=subject._id%>">
+                <h3 class="subject-title"><%=subject.subject%></h3>
+                <%subject.conversations.reverse().map((conv)=>{ %>
+                    <div class="row conv-container" onclick="location.href='/forum-page?subject=<%=subject.subject.replace(/\s/g, '_')%>&post=<%=conv.title.replace(/\s/g, '_').replace(/'/g, '<')%>+<%=conv.author.replace(/\s/g, '_')%>+<%=conv.date.replace(/\s/g, '_')%>'">
+                        <p class="conv-title"><%=conv.title%></p>
+                        <div class="conv-answer">
+                            <span class="fa fa-indent" aria-hidden="true"></span>
+                            <p><%=conv.answers.length%> answer<%if(conv.answers.length > 1){%>s<%}%></p>
+                        </div>
+                        <p class="conv-author "><%=conv.author%></p>
+                        <p class="conv-date"><%=conv.date%></p>
+                    </div>
+                <%})%>
+            </div>
+        <%})%>
+        </div>
+    </section>
+    <%- include('onlineFriend.ejs') -%>
+    <section id="chat-row">
+        <%if(locals.user){%><%-locals.user.chatBar%><%}%>
+    </section>
+</body>
+</html>

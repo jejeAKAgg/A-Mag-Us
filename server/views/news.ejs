@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('allLink'); -%>
+    <link rel="stylesheet" type="text/css" href="styles/news.css">
+    <title>Forum | A-Mag Us</title>
+</head>
+<body>
+<header>
+    <%- include('navbar'); -%>
+</header>
+
+<section class="main">
+    <form class="form" method="post" action="/add-news" enctype="multipart/form-data">
+        <label for="title"></label>
+        <input class="text-center" type="text" placeholder="Title" name="title"
+               id="title" maxlength="20" required>
+        <label for="resume"></label>
+        <input class="text-center" type="text" placeholder="Resume" name="resume"
+               id="resume" maxlength="60" required>
+        <label for="content"></label>
+        <textarea rows="10" cols="60" name="content" id="content" placeholder="Enter your text here..."
+                  minlength="" maxlength="" required></textarea>
+        <input  class="custom-file" type="file"  id="image" name="image" accept="image/jpg, image/jpeg, image/png">
+        <input class="myBtn btn btn-dark btn-lg" type="submit" value="Submit">
+    </form>
+</section>
+<%- include('onlineFriend.ejs') -%>
+<section id="chat-row">
+    <%if(locals.user){%><%-locals.user.chatBar%><%}%>
+</section>
+</body>
+</html>

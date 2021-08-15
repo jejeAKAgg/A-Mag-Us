@@ -1,0 +1,25 @@
+<%if(locals.user && locals.user.pseudo){%>
+    <div id="online-list" class="offscreen" style="display: none;">
+        <ul id="inner-list">
+        </ul>
+    </div>
+    <section class="online-friend" onclick="displayFriend()">
+        <span class="fa fa-users"></span>
+    </section>
+    <script>
+        function displayFriend(){
+            let div = document.getElementById('online-list');
+            if(div.classList.contains('offscreen')){
+                div.style.display = 'block';
+                div.classList.remove('offscreen');
+            }else{
+                div.classList.add('offscreen');
+                div.style.display = 'none';
+            }
+        }
+
+        if(document.getElementById('inner-list') && document.getElementById('inner-list').childElementCount === 0){
+            $('#inner-list').append($('<li id=\"to-remove-online\">').append($('<p>').html("No friend online yet...")));
+        }
+    </script>
+<%}%>

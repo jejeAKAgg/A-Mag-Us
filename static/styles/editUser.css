@@ -1,0 +1,58 @@
+.user-image{
+    z-index: 1;
+    cursor: pointer;
+    position: relative;
+    margin-top: 10%;
+    margin-left: 7%;
+    width: 250px;
+    height: 250px;
+    border: 5px solid rgba(30, 133, 232, 0.66);
+    border-radius: 50%;
+}
+
+.user-info{
+    position: absolute;
+    top: 25%;
+    background-color: rgba(20,25,46,0.91);
+    width: 80%;
+    margin-left: 10%;
+    min-width: 50%;
+    height: 70%;
+    border-radius: 15px;
+}
+
+.user-info form .container{
+    margin-top: -2%;
+}
+
+h1 {
+    display: inline-flex;
+    margin-top: 4%;
+    margin-left: 44%;
+    color: aliceblue;
+}
+
+.container {
+    margin-left: 28%;
+    margin-top: 15px;
+}
+
+.form-group {
+    margin-top: 2%;
+    width: 70%;
+}
+
+#small-form-group-left {
+    width: 60%;
+}
+
+#small-form-group-right {
+    margin-left: -21%;
+    width: 60%;
+}
+
+#edit {
+    margin-top: 1%;
+    width: 80px;
+    margin-left: 47%;
+}

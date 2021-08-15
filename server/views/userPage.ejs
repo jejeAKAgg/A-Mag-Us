@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('allLink'); -%>
+    <title><%= locals.doc.pseudo%> | A-Mag Us </title>
+    <link rel="stylesheet" type="text/css" href="/styles/userPage.css">
+</head>
+<body>
+    <header>
+        <%- include('navbar'); -%>
+    </header>
+    <img src="images/userDefault.jpg" alt="" class="user-image circle">
+    <div class="user-info">
+        <div class="user-title">
+            <div class="user-infos">
+                <h1 class="user-name"><%= locals.doc.pseudo%></h1>
+                <p class="user-country">
+                    <% if (locals.doc.country === null) {%>
+                        Belgium,
+                    <%} else {%>
+                        <%= locals.doc.country %>,
+                    <%}%>
+                <p class="user-language">
+                    <% if (locals.doc.language === null) {%>
+                        FR
+                    <%} else {%>
+                        <%= locals.doc.language.toUpperCase() %>
+                    <%}%>
+                </p>
+
+                <p class="status-zone">
+                    <% if (locals.doc.master == true && locals.doc.activated == true) {%>
+                        <img src = "/images/couronne.png" alt class = "status-image">
+                        <img src = "/images/verified.png" alt class = "status-image">
+                    <%}else if(locals.doc.admin == true && locals.doc.activated == true){%>
+                            <img src = "/images/admin.png" alt class = "status-image">
+                            <img src = "/images/verified.png" alt class = "status-image">
+                    <%}else if(locals.doc.activated == true){%>
+                            <img src = "/images/verified.png" alt class = "status-image">
+                    <%}else {%>
+                        <img src = "/images/notverified.png" alt class = "status-image">
+                        <%}%>
+                </p>
+
+            </div>
+
+        </div>
+        <div class="user-pref">
+            <img class="btn-fav" src="" alt="">
+            <p class="user-map">
+                <% if (locals.doc.favoriteMap === null) {%>
+                    Unknown
+                <%} else {%>
+                    <%= locals.doc.favoriteMap.charAt(0).toUpperCase() + locals.doc.favoriteMap.slice(1) %>
+                <%}%>
+            </p>
+            <img class="btn-fav" src="" alt="">
+            <p class="user-colour">
+                <% if (locals.doc.favoriteColor === null) {%>
+                    Unknown
+                <%} else {%>
+                    <%= locals.doc.favoriteColor.charAt(0).toUpperCase() + locals.doc.favoriteColor.slice(1) %>
+                <%}%>
+            </p>
+        </div>
+
+        <div class="friend-buttons" id="user-btn-container">
+            <%if(locals.user && locals.doc.pseudo !== locals.user.pseudo){%>
+                <%if(locals.isFriend){%>
+                    <button class="msg-btn btn btn-dark"
+                            onclick="openChat('<%=locals.doc.publicKey.replace(/\n/g, '$')%>', '<%=locals.doc.pseudo%>')">
+                        Message
+                        <span class="fa fa-comment"></span>
+                    </button>
+                <%}else if(locals.isRequested){%>
+                    <button class="cancel-btn btn btn-dark disabled">
+                        Invitation sent
+                        <span class="far fa-user-clock"></span>
+                    </button>
+                <%}else if(locals.isReceived){%>
+                    <button class="accept-btn btn btn-dark"
+                            onclick="location.href='/acceptFriend?user=<%=locals.doc.pseudo%>'">
+                        Accept invitation
+                        <span class="fa fa-user-plus"></span>
+                    </button>
+                <%}else{%>
+                    <button class="friend-btn btn btn-dark"
+                            onclick="location.href='/friendReq?user=<%=locals.doc.pseudo%>'">
+                        Add Friend
+                        <span class="fa fa-user-plus"></span>
+                    </button>
+                <%}%>
+            <%}else if(locals.user && locals.user.pseudo){%>
+                <button class="edit-btn btn btn-dark" onclick="location.href='/edit-user'">
+                    Edit
+                    <span class="far fa-user-edit"></span>
+                </button>
+            <%}%>
+            <%if(locals.user && locals.user.pseudo && (locals.user.master || locals.user.admin) &&
+                            locals.user.pseudo !== locals.doc.pseudo){%>
+                <%if(locals.doc.admin && locals.user.master && !locals.doc.master){%>
+                    <button class="demote-btn btn btn-dark"
+                            onclick="location.href='/rank?up=false&user=<%= locals.doc.pseudo%>'">
+                        Demote
+                    </button>
+                <%}else if(!locals.doc.admin || !locals.doc.master){%>
+                    <button class="promote-btn btn btn-dark"
+                            onclick="location.href='/rank?up=true&user=<%= locals.doc.pseudo%>'">
+                        Promote
+                    </button>
+                <%}%>
+            <%}%>
+        </div>
+    </div>
+    <%- include('onlineFriend.ejs') -%>
+    <section id="chat-row">
+        <%if(locals.user){%><%-locals.user.chatBar%><%}%>
+    </section>
+</body>
+</html>

@@ -1,0 +1,108 @@
+body{
+    margin-top: 5%;
+    color: white;
+}
+
+h1{
+    color: white;
+    margin: 2% 0 2% 5%;
+    font-size: 4em;
+}
+
+.subjects-block{
+    width: 100%;
+}
+
+.subject-container{
+    width: 90%;
+    margin-left: 5%;
+    margin-bottom: 2%;
+    background-color: rgba(41, 41, 41, 0.71);
+    border-radius: 15px 15px 0 0;
+}
+
+.subject-title{
+    width: 100%;
+    background-color: #1f2a43;
+    padding: 1% 0 1% 10%;
+    border-radius: 15px 15px 0 0;
+}
+
+.conv-container{
+    border-bottom: 1px solid rgba(110, 110, 110, 0.82);
+    cursor: pointer;
+    width: 100%;
+    margin: 0;
+}
+
+.conv-container:last-child{
+    border-bottom: none;
+    padding-bottom: .1%;
+}
+
+.conv-title{
+    padding: 1% 15% 0 5%;
+    width: 55%;
+    overflow: hidden;
+}
+.conv-author,
+.conv-answer,
+.conv-date{
+    padding: 1% 1% 0 1%;
+    overflow: hidden;
+    width: 15%;
+}
+
+.conv-answer{
+    display: inline-flex;
+}
+
+.fa-indent{
+    padding-top: 2%;
+    margin-right: 5%;
+}
+
+
+.before{
+    display: inline-flex;
+    width: 95%;
+    margin-right: 5%;
+}
+
+.before button{
+    align-self: center;
+    justify-self: center;
+}
+
+.post-btn{
+    height: 50px;
+}
+
+.search-forum {
+    width: 100%;
+    margin-bottom: 2%;
+}
+
+.search-forum form{
+    margin-left: 25%;
+    width: 50%;
+    align-content: center;
+    justify-content: center;
+    display: inline-flex;
+}
+
+#search {
+    background-color: rgba(53, 58, 64, 0.94);
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    font-size: 1.2em;
+    width: 45%;
+    height: 40px;
+}
+
+.search-forum button{
+    height: 40px;
+    margin-left: 1%;
+}

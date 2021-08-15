@@ -1,0 +1,164 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-lg" id="menu">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#left-menu"
+            aria-controls="left-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="left-menu">
+        <menu class="navbar-nav">
+            <li class="nav-item">
+                <button class="btn btn-dark btn-block nav-button" onclick="location.href='/'">Home</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-dark btn-block nav-button" onclick="location.href='/forum'">Forum</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-dark btn-block nav-button" onclick="location.href='/about-us'">About us</button>
+            </li>
+        </menu>
+    </div>
+
+    <%if(!locals.user){%>
+    <div class="" id="right-menu">
+        <menu class="navbar-nav" id="user-menu">
+            <li>
+                <div class="nav-item dropdown">
+                    <a class="btn btn-dark dropdown-toggle btn-custom-dd" href="#" role="button" id="loginB"
+                       data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        Login
+                    </a>
+
+                    <div class="dropdown-menu drop-down-custom" aria-labelledby="loginB">
+                        <form method="post" action="/login">
+                            <label class="offscreen" for="pseudoIn">Pseudo: </label>
+                            <input class="dropdown-item text-center" type="text" placeholder="Pseudo"
+                                   name="pseudoIn" id="pseudoIn" autocomplete="off" required>
+                            <label class="offscreen" for="passIn">Password: </label>
+                            <input class="dropdown-item text-center" type="password" placeholder="Password"
+                                   name="passIn" id="passIn" autocomplete="off" required>
+                            <input class="dropdown-item btn btn-dark text-center" type="submit" value="Se connecter">
+                        </form>
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <div class="nav-item dropdown">
+                    <a class="btn btn-dark dropdown-toggle btn-custom-dd" href="#" role="button" id="signupB"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Sign Up
+                    </a>
+
+                    <div class="dropdown-menu drop-down-custom" aria-labelledby="signupB">
+                        <form method="post" action="/signup">
+                            <label class="offscreen" for="mailIn">Email: </label>
+                            <input class="dropdown-item text-center" type="email" placeholder="Mail"
+                                   name="mailIn" id="mailIn" autocomplete="off" required>
+                            <label class="offscreen" for="pseudoIn2">Pseudo: </label>
+                            <input class="dropdown-item text-center" type="text" placeholder="Pseudo"
+                                   name="pseudoIn" id="pseudoIn2" minlength="8" autocomplete="off" required>
+                            <label class="offscreen" for="passIn2">Password: </label>
+                            <input class="dropdown-item text-center" type="password" placeholder="Password"
+                                   name="passIn" id="passIn2" minlength="8" autocomplete="off" required>
+                            <label class="offscreen" for="passInC">Password2: </label>
+                            <input class="dropdown-item text-center" type="password" placeholder="Pass confirmation"
+                                   name="passInC" id="passInC" minlength="8" autocomplete="off" required>
+                            <input class="dropdown-item btn btn-dark text-center" type="submit" value="S'inscrire">
+                        </form>
+                    </div>
+                </div>
+            </li>
+        </menu>
+    </div>
+    <%}%>
+</nav>
+<%if(locals.user){%>
+    <div class="user-menu">
+        <img src="images/userDefault.jpg" alt="user picture" class="user-image-nav circle70"
+             onclick="location.href='/user-page?user=<%=locals.user.pseudo%>';">
+        <div class="to-block">
+            <ul class="user-info-nav">
+                <li>
+                    <p id="user_id" class="no-select"><%=locals.user.pseudo%></p>
+                </li>
+                <li>
+                    <ul class="icon-bar">
+                        <li>
+                            <div class="dropdown">
+                                <a id="search-user-img" class="dropdown-to" data-toggle="dropdown">
+                                    <img class="icon-bar-item" src="images/user-search-icon.png" alt="" >
+                                </a>
+                                <div id="search-user" class="dropdown-menu">
+                                    <form method="post" action="/" id="search-user-form">
+                                        <label for="search-input"></label>
+                                        <input type="text" id="search-input" name="search-input" placeholder="Type here..." required>
+                                        <button class="btn btn-dark" id="search-user-btn"><span class="fas fa-search"></span></button>
+                                    </form>
+                                    <ul id="search-res"></ul>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="dropdown">
+                                <a id="notifImg" class="dropdown-to" data-toggle="dropdown">
+                                    <img class="icon-bar-item" src="images/notif.png" alt="">
+                                </a>
+                                <ul class="dropdown-menu drop-down-custom" aria-labelledby="notifImg" id="notif-dd">
+                                    <%locals.user.notifications.reverse().map((notif)=>{%>
+                                        <li>
+                                            <div class="notif <%=notif.type%>">
+                                                <img class="notif-img" src="<%=notif.picture%>" alt="">
+                                                <% if(notif.type === 'friendRequest'){%>
+                                                    <p class="notif-p"><%=notif.pseudo%> invited you as friend!</p>
+                                                    <button class="btn btn-dark"
+                                                            onclick="location.href='/acceptFriend?user=<%=notif.pseudo%>'" >
+                                                        Accept
+                                                    </button>
+                                                    <button class="btn btn-dark"
+                                                            onclick="location.href='/refuse?user=<%=notif.pseudo%>'" >
+                                                        Refuse
+                                                    </button>
+                                                <%}else if(notif.type === "friendAcceptation"){%>
+                                                    <p class="notif-p"><%=notif.pseudo%> accepted your invitation!</p>
+                                                <%}else if(notif.type === "acceptTrace"){%>
+                                                    <p class="notif-p"><%=notif.pseudo%> and you are friend now!</p>
+                                                <%}else if(notif.type === 'rankChanged'){%>
+                                                    <p class="notif-p"><%= notif.up?"You were promote to admin":"Due to your comportment you've been removed from admin team"%></p>
+                                                <%}%>
+                                            </div>
+                                        </li>
+                                    <%})%>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="dropdown">
+                                <a id="paramImg" class="dropdown-to" data-toggle="dropdown">
+                                    <img class="icon-bar-item" src="images/param.png" alt="">
+                                </a>
+                                <ul class="dropdown-menu drop-down-custom" aria-labelledby="paramImg">
+                                    <li><button class="dropdown-item btn btn-dark" onclick="location.href='/edit-user';">Editer Profil</button></li>
+                                    <li><button class="dropdown-item btn btn-dark" onclick="location.href='/disconnect';">Déconnection</button></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+<label for="privateKey" class="offscreen"></label>
+<textarea id="privateKey" class="offscreen"><%=locals.user.privateKey%></textarea>
+<%}%>
+<%if(locals.errorResponse){%>
+<div class="alert error <%if(locals.valid){%>valid<%}%>">
+    <button id="cookieBtn" type="button" class="close"
+            data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p id="error-inner"><%=locals.errorResponse%></p>
+</div>
+<%}%>
+<%- include('script') -%>

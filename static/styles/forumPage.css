@@ -1,0 +1,74 @@
+body{
+    margin-top: 7%;
+    color: white;
+}
+
+.conv-title{
+    margin-left: 5%;
+}
+
+.post-container{
+    width: 90%;
+    margin-top: 3%;
+    margin-left: 5%;
+    background-color: rgba(90, 90, 90, 0.49);
+    border-radius: 10px;
+    padding: 1% 2% 1% 2%;
+}
+
+.post-frame{
+    margin: 1% 2.5% 0 2.5%;
+    padding: 1% 2% 1% 2%;
+    background-color: rgba(28, 44, 79, 0.58);
+    border-radius: 10px 10px 0 10px;
+    border-bottom: 3px solid darkgray;
+}
+
+.post-header, .answer-header{
+    display: inline-flex;
+    width: 100%;
+}
+
+.answer-container{
+    width: 92.5%;
+    padding: 0 0 1% 0;
+    margin-left: 5%;
+    margin-right: 2.5%;
+}
+
+.answer-frame{
+    padding: 1% 2% 1% 2%;
+    border-bottom: 1px solid darkgray;
+}
+
+.answer-frame:nth-child(even){
+    background-color: rgba(46, 59, 90, 0.53);
+}
+
+.answer-frame:nth-child(odd){
+    background-color: rgba(22, 83, 129, 0.37);
+}
+
+.answer-frame:last-child{
+    border: none;
+    border-radius: 0 0 10px 10px;
+}
+
+.answer-input-frame{
+    width: 95%;
+    margin-left: 2.5%;
+}
+
+.answer-input-frame textarea{
+    color: white;
+    width: 100%;
+    padding: 1% 2% 1% 2%;
+    border-radius: 5px;
+    border: none;
+    background-color: rgba(90, 90, 90, 0.53);
+    margin-bottom: 2%;
+}
+
+.checker-container{
+    margin-bottom: 2%;
+}

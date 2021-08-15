@@ -1,0 +1,15 @@
+<%if(!locals.cookie && locals.cookieShowed){%>
+    <div class="cookie-popup alert" role="alert" id="cookie-popup">
+        <button id="cookieBtn" type="button" class="close"
+                data-dismiss="alert" aria-label="Close"
+                onclick="()=>{
+                    $.post('/cookieDump');
+                }">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p class="cookie-content">
+            By browsing this website you accept the use of cookies in order to collect information from your connection.<br/>
+            No data will be shared with third party.<br/>
+        </p>
+    </div>
+<%}%>
