@@ -109,6 +109,8 @@
                 if (document.getElementById('to-remove-online')) document.getElementById('to-remove-online').remove();
                 let picture = notif.picture ? notif.picture : "images/userDefault.jpg"
 
+
+
                 let online = "<li id=\"" + notif.pseudo + "\">\n" +
                     "    <div class=\"online-friend-container\" onclick=\"openChat(\'"+ notif.publicKey + "\',\'" +
                     notif.pseudo.toString() + "\')\">\n" +
@@ -126,6 +128,12 @@
                     'date': new Date().toISOString()
                 }
                 socket.emit('notif', response, to);
+
+                <% if (locals.doc !== undefined && locals.doc.pseudo !== locals.user.pseudo) { %>
+                    if (notif.pseudo === "<%=locals.doc.pseudo%>") {
+                        document.getElementById('onlinestatus').style.backgroundColor = "#45c716";
+                    }
+                <%}%>
                 break;
 
             case("onlineResponse"):
@@ -139,6 +147,11 @@
                     "    </div>\n" +
                     "</li>\n";
                 document.getElementById('inner-list').insertAdjacentHTML('afterbegin', on);
+                <% if (locals.doc !== undefined && locals.doc.pseudo !== locals.user.pseudo) { %>
+                    if (notif.pseudo === "<%=locals.doc.pseudo%>") {
+                        document.getElementById('onlinestatus').style.backgroundColor = "#45c716";
+                    }
+                <%}%>
                 break;
             case("rankChanged"):
                 $.post('/rank', {}, (data, state)=>{
@@ -164,6 +177,11 @@
         header.classList.add('blink');
     });
     <%# socket listener end%>
+
+    function TM(nf, to){
+        socket.emit("notif", nf, to);
+
+    }
 
     function openChat(publicKey, user, closed=false){
         if (document.getElementById('chat-box-'+user)) return

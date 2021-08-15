@@ -13,6 +13,19 @@ body{
     border-radius: 50%;
 }
 
+#onlinestatus{
+    z-index: 5;
+    clip-path: circle(15px at center);
+    border: 5px solid white;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    margin-left: 24%;
+    margin-top: 27%;
+    background-color: #4F4F4F;
+}
+
 .user-info{
     position: absolute;
     display: block;

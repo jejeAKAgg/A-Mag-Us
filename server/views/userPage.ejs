@@ -10,6 +10,10 @@
         <%- include('navbar'); -%>
     </header>
     <img src="images/userDefault.jpg" alt="" class="user-image circle">
+    <div id = "onlinestatus"></div>
+    <script> <% if ( locals.doc !== undefined && locals.user !== undefined && locals.doc.pseudo === locals.user.pseudo) {%>
+                document.getElementById('onlinestatus').style.backgroundColor = "#45c716";
+        <%}%> </script>
     <div class="user-info">
         <div class="user-title">
             <div class="user-infos">
