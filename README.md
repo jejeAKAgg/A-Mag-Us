@@ -1,4 +1,7 @@
-# APPSINF LINFO1212 Groupe Q Projet Final
+# APPSINF LINFO1212 Groupe Q Projet Final (Rattrapage)
+#### Rapport de rattrapage
+Vous trouverez ci-joint le rapport de rattrapage où les extensions ajoutées sur ce site web sont également ajoutées dans le rapport avec une mention "NEW".
+
 ## A-Mag-Us
 #### Table des matières
 <ol>
