@@ -103,6 +103,12 @@
                 if (document.getElementById('inner-list') && document.getElementById('inner-list').childElementCount === 0) {
                     $('#inner-list').append($('<li id=\"to-remove-online\">').append($('<p>').html("No friend online yet...")));
                 }
+
+                <% if (locals.doc !== undefined && locals.doc.pseudo !== locals.user.pseudo) { %>
+                    if (notif.pseudo === "<%=locals.doc.pseudo%>") {
+                        document.getElementById('onlinestatus').style.backgroundColor = "#4f4f4f";
+                    }
+                <%}%>
                 break;
 
             case("onlineFriend"):
